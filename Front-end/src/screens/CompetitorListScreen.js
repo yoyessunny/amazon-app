@@ -3,7 +3,7 @@ import axios from 'axios';
 import {toast} from 'react-toastify';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Modal, Button } from 'antd';
 import 'antd/dist/antd.css';
 
@@ -14,82 +14,53 @@ const reducer = (state, action) => {
         case 'FETCH_SUCCESS':
           return {
              ...state, 
-             products: action.payload, 
-             page: action.payload.page, 
-             pages: action.payload.pages, 
+             competitorData: action.payload,  
              loading: false
             };
         case 'FETCH_FAIL':
           return { ...state, loading: false, error: action.payload};
-        case 'DELETE_REQUEST':
-          return { ...state, loadingDelete: true, successDelete: false};
-        case 'DELETE_SUCCESS':
-          return {
-             ...state, 
-             loadingDelete: false,
-             successDelete: true,
-            };
-        case 'DELETE_FAIL':
-          return { ...state, loadingDelete: false, successDelete: false};
-        case 'DELETE_RESET':
-          return { ...state, loadingDelete: false, successDelete: false};
         default:
           return state
     }
 }
 
-const ProductListScreen = () => {
+const CompetitorListScreen = () => {
 
-    const [registerAsin, setRegisterAsin] = useState('');
+    const [registerAsin, setRegisterAsin] = useState("");
     const [registerFlag, setRegisterFlag] = useState(false);
 
-    const [{ loading, error, products, loadingDelete, successDelete}, dispatch] = useReducer(reducer, {
+    const [{ loading, error, competitorData}, dispatch] = useReducer(reducer, {
         loading: true,
         error: '',
     });
 
-    const navigate = useNavigate();
+    const params = useParams();
+    const {id} = params;
 
     useEffect(() => {
         const fetchData = async() => {
             try{
-                const {data} = await axios.get('http://localhost:5000/product');
+                dispatch({type: 'FETCH_REQUEST'});
+                const {data} = await axios.get(`http://localhost:5000/competitor/${id}`);
                 dispatch({type: 'FETCH_SUCCESS', payload: data});
             }catch(err){
-
+                dispatch({type: 'FETCH_FAIL', payload: err});
             }
         }
         fetchData();
-        if(successDelete){
-            dispatch({type: 'DELETE_RESET'});
-        }else{
-            fetchData();
-        }
-    },[successDelete,registerFlag]);
+    },[id,registerFlag]);
 
-    const deleteHandler = async(product) => {
-        if(window.confirm('Are you sure to delete?')) {
-            try{
-                await axios.delete(`http://localhost:5000/productdelete/${product._id}`);
-                toast.success("Product Deleted");
-                dispatch({type: 'DELETE_SUCCESS'});
-            } catch(err){
-                toast.error(err);
-                dispatch({type: 'DELETE_FAIL'});
-            }
-        }
-    }
 
     const registerHandler = async() => {
         try{
             const data = {
-                product_asin: registerAsin
+                comp_asin: registerAsin
             }
             console.log(data);
-            await axios.post('http://localhost:5000/productregister', data)
+            await axios.post(`http://localhost:5000/competitorregister/${id}`, data)
             .then(function (response) {
                 console.log(response);
-                toast.success("Product Added");
+                toast.success("Competitor Added");
                 setRegisterFlag(!registerFlag);
                 handleOk();
               })
@@ -121,7 +92,14 @@ const ProductListScreen = () => {
     <div>
         <Row>
             <Col>
-        <h1>Products</h1>
+        <h1>Competitors</h1>
+            </Col>
+            <Col>
+                <div>
+                    <Button type="primary" onClick={()=>setRegisterFlag(!registerFlag)}>
+                        Refresh
+                    </Button>
+                </div>
             </Col>
             <Col className='col text-end'>
                 <div>
@@ -132,7 +110,7 @@ const ProductListScreen = () => {
             </Col>
         </Row>
 
-        {loadingDelete && <div>Loading...</div>}
+        {loading && <div>Loading...</div>}
 
         {
         loading ? <div>Loading...</div>
@@ -143,37 +121,19 @@ const ProductListScreen = () => {
            <table className='table'>
                <thead>
                    <tr>
+                       <th class="col-sm-2">ASIN</th>
                        <th class="col-sm-6">NAME</th>
                        <th class="col-sm-2">PRICE</th>
-                       <th class="col-sm-2">ASIN</th>
-                       <th class="col-sm-2">ACTIONS</th>
                    </tr>
                </thead>
                <tbody>
                    {
-                        products && products.map((item, index) => {
+                        competitorData && competitorData.map((item, index) => {
                             return (<> {(!item.delete_flag)?(
-                                <tr key={index}>                                
-                                    <td>{item.product_name}</td>
-                                    <td>{item.product_price}</td>
-                                    <td>{item.product_asin}</td>
-                                    <td>
-                                        <Button
-                                        type='button'
-                                        variant='light'
-                                        onClick={()=> navigate(`/competitors/${item._id}`)}
-                                        >
-                                            View
-                                        </Button>
-                                        &nbsp;
-                                        <Button
-                                        type='button'
-                                        variant='light'
-                                        onClick={()=> deleteHandler(item)}
-                                        >
-                                            Delete
-                                        </Button>
-                                    </td>
+                                <tr key={index}> 
+                                    <td>{item.comp_asin}</td>                               
+                                    <td>{item.comp_name}</td>
+                                    <td>{item.comp_price}</td>
                                 </tr>
                             ):""}</>);
                           })
@@ -183,7 +143,7 @@ const ProductListScreen = () => {
            </> 
         )}
 
-            <Modal title="Add Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="Add Competitor Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
             <form className="row g-3" onSubmit={(e)=>{e.preventDefault(); registerHandler();}}>
                 <div className="col-md-6">
                     <label htmlFor="asin#" className="form-label">ASIN#</label>
@@ -198,4 +158,4 @@ const ProductListScreen = () => {
   )
 }
 
-export default ProductListScreen;
+export default CompetitorListScreen;

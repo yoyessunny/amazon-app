@@ -85,7 +85,6 @@ const TrashProductListScreen = () => {
            <table className='table'>
                <thead>
                    <tr>
-                       <th>ID</th>
                        <th>NAME</th>
                        <th>PRICE</th>
                        <th>ACTIONS</th>
@@ -96,7 +95,6 @@ const TrashProductListScreen = () => {
                         products && products.map((item, index) => {
                             return (<>{(item.delete_flag)?(
                                 <tr key={index}>
-                                    <td>{item._id}</td>
                                     <td>{item.product_name}</td>
                                     <td>{item.product_price}</td>
                                     <td>

@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import ProductListScreen from './screens/ProductListScreen';
 import TrashProductListScreen from './screens/TrashProductListScreen';
 import Footer from './components/Footer';
+import CompetitorListScreen from './screens/CompetitorListScreen';
 
 const App = () => {
 
@@ -29,6 +30,7 @@ const App = () => {
                 (<>
                   <Routes>
                 <Route path="/" exact={true} element={<ProductListScreen/>} />
+                <Route path="/competitors/:id" exact={true} element={<CompetitorListScreen/>} />
                 <Route path="/trashproductlist" element={<TrashProductListScreen/>} />
                 </Routes>
                 <Footer />

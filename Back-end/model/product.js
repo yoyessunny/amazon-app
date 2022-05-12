@@ -2,17 +2,17 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const reviewschema = new Schema({
+const competitorschema = new Schema({
     // _id:mongoose.Schema.Types.ObjectId,
-    name: {
+    comp_asin: {
         type: String,
         required: true
     },
-    comment: {
+    comp_name: {
         type: String,
     },
-    rating: {
-        type: Number,
+    comp_price: {
+        type: String,
     },
 });
 
@@ -22,31 +22,16 @@ const productschema = new Schema({
         type: String,
         required: true
     },
-    product_image: {
+    product_asin: {
         type: String,
     },
     product_price: {
         type: String,
     },
-    product_rating: {
-        type: String,
-    },
-    product_reviews: {
-        type: Number,
-    },
-    product_description: {
-        type: String,
-    },
-    product_countInStock: {
-        type: String,
-    },
-    product_category: {
-        type: String,
-    },
     delete_flag: {
         type: Boolean,
     },
-    reviews: [reviewschema]
+    competitors: [competitorschema]
 });
 
 const Product = mongoose.model("product", productschema);

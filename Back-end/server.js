@@ -81,45 +81,52 @@ app.get("/product", async(req, res) => {
 
 app.post("/productregister", async(req, res) => {
   try{
-    console.log("req.body: ",req.body);
-
-    // const {product_asin} = req.body;
-    const product_asin = "B072DYG94F";
+    const {product_asin} = req.body;
+    var product_name, product_price;
 
     await axios.get(`https://api.rainforestapi.com/request?api_key=${process.env.AMAZON_API_KEY}&type=product&asin=${product_asin}&amazon_domain=amazon.in`)
     .then(function (response) {
-      console.log(response.data.product.title);
+      product_name = response.data.product.title;
+      product_price = response.data.product.buybox_winner.price.value;
     })
     .catch(function (error) {
       console.log(error);
     });
-    res.send("");
-    // await Product.create({
-    //     product_name: product_name,
-    //     product_image: product_image,
-    //     product_price: product_price,
-    //     product_rating: product_rating,
-    //     product_reviews: product_reviews,
-    //     product_description: product_description,
-    //     product_countInStock: product_countInStock,
-    //     product_category: product_category,
-    //     delete_flag: false,
-    //   }).then(()=>{
-    //     res.send("Product Added");
-    //   }).catch((err) => {
-    //     console.log(err);
-    //   });
+  
+    await Product.create({
+        product_name: product_name,
+        product_price: product_price,
+        product_asin: product_asin,
+        delete_flag: false,
+      }).then(()=>{
+        res.send("Product Added");
+      }).catch((err) => {
+        console.log(err);
+      });
   } catch (err) {}
 });
 
-app.get("/product/:id", async(req, res) => {
-  const product_id = req.params.id;
-  const product = await Product.findById(product_id);
+app.get("/competitor/:id", async(req, res) => {
+  const id = req.params.id;
+  const product = await Product.findById(id);
+  
   if(product){
-    res.send(product);
+    product.competitors.map((value, index)=>{
+      axios.get(`https://api.rainforestapi.com/request?api_key=${process.env.AMAZON_API_KEY}&type=product&asin=${value.comp_asin}&amazon_domain=amazon.in`)
+      .then(function (response) {
+        value.comp_name = response.data.product.title;
+        value.comp_price = response.data.product.buybox_winner.price.value;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    });
+    await product.save();
+    res.send(product.competitors);  
   }else{
     res.send("Product not found");
   }
+
 });
 
 app.put("/productedit/:id", async(req, res) => {
@@ -160,24 +167,34 @@ app.delete("/productrestore/:id", async(req, res) => {
   }
 });
 
-app.post("/product/:id/reviews", async(req, res) => {
-  const product_id = req.params.id;
-  const product = await Product.findById(product_id);
+app.post("/competitorregister/:id", async(req, res) => {
+  const id = req.params.id;
+  const comp_asin = req.body.comp_asin;
+  const product = await Product.findById(id);
+
+  var comp_name, comp_price;
+
+    await axios.get(`https://api.rainforestapi.com/request?api_key=${process.env.AMAZON_API_KEY}&type=product&asin=${comp_asin}&amazon_domain=amazon.in`)
+    .then(function (response) {
+      comp_name = response.data.product.title;
+      comp_price = response.data.product.buybox_winner.price.value;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  
+
   if(product){
-    const review ={
-      name: req.body.name,
-      rating: Number(req.body.rating),
-      comment: req.body.comment,
+    const competitor ={
+      comp_asin: comp_asin,
+      comp_name: comp_name,
+      comp_price: comp_price,
     };
-    product.reviews.push(review);
-    product.product_reviews = product.reviews.length;
-    product.product_rating =
-      product.reviews.reduce((a, c) => c.rating + a, 0) /
-      product.reviews.length;
+    product.competitors.push(competitor);
     const updatedProduct = await product.save();
     res.send({
-      message: 'Review Created',
-      review: updatedProduct.reviews[updatedProduct.reviews.length - 1],
+      message: 'Competitor Created',
+      product: updatedProduct.competitors[updatedProduct.competitors.length - 1],
     });
   }else{
     res.send("Product not found");
