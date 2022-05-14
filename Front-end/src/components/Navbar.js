@@ -19,11 +19,11 @@ const Navbar = () => {
 
   if(loginname===""){
     menu = (
-      <Link to="/login" type="button" className="btn btn-outline-light me-2">Login</Link>
+      <Link to="/login" type="button" className="btn btn-outline-dark me-2">Login</Link>
     );
   }else{
     menu = (
-      <Link to="/login" type="button" className="btn btn-outline-light me-2" onClick={logout}>Logout</Link>
+      <Link to="/login" type="button" className="btn btn-outline-dark me-2" onClick={logout}>Logout</Link>
     );
   }
 
@@ -33,18 +33,13 @@ const Navbar = () => {
   }
 
   return (
-    <div>
-      <header className="p-3 bg-dark text-white">
+    <div style={{marginLeft: "160px"}}>
+      <header className="p-3 bg-light text-black">
         <div className="container">
-          <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <Link to="/" className="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-              <img src='logo192.png' alt='' width='50px' />
-            </Link>
-
-            <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <li><Link to="/" className="nav-link px-2 text-white">ProductList</Link></li>
-              <li><Link to="/trashproductlist" className="nav-link px-2 text-white">Trash</Link></li>
-            </ul>
+          <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between">
+            <div className="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+              
+            </div>
 
             <form className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" onSubmit={submitHandler}>
               <input type="search" className="form-control form-control-dark" placeholder="Search..." aria-label="Search" 

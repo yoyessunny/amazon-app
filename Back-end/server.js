@@ -109,6 +109,7 @@ app.post("/productregister", async(req, res) => {
 app.get("/competitor/:id", async(req, res) => {
   const id = req.params.id;
   const product = await Product.findById(id);
+  var valueArray=[];
   
   if(product){
     product.competitors.map((value, index)=>{
@@ -116,11 +117,14 @@ app.get("/competitor/:id", async(req, res) => {
       .then(function (response) {
         value.comp_name = response.data.product.title;
         value.comp_price = response.data.product.buybox_winner.price.value;
+        valueArray.push(value.comp_price);
+        console.log(value.comp_price);
       })
       .catch(function (error) {
         console.log(error);
       });
     });
+    // console.log(valueArray);
     await product.save();
     res.send(product.competitors);  
   }else{
