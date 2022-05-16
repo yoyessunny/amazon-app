@@ -21,6 +21,11 @@ const Sidebar = () => {
           Inventory
         </Link>
       </li>
+      <li>
+        <Link to="/orders" className="nav-link">
+          Orders
+        </Link>
+      </li>
     </ul>
     </div>
     </div>

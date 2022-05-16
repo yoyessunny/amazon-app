@@ -81,65 +81,121 @@ app.get("/product", async(req, res) => {
 
 app.post("/productregister", async(req, res) => {
   try{
-    const {product_asin} = req.body;
-    var product_name, product_price;
 
-    await axios.get(`https://api.rainforestapi.com/request?api_key=${process.env.AMAZON_API_KEY}&type=product&asin=${product_asin}&amazon_domain=amazon.in`)
-    .then(function (response) {
-      product_name = response.data.product.title;
-      product_price = response.data.product.buybox_winner.price.value;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  
+    const {SKU, EAN_CODE, Brand_Name, Product_Name, HSN_Code, GST,
+      Description, Bullet1, Bullet2, Bullet3, Bullet4, Bullet5,
+      Item_Weight, Item_Length, Item_Width, Item_Height, Item_Unit_Measure,
+      Country, MRP, Manufacturer, Ingredients, Category, Keywords,
+      Main_Image, Image1, Image2, Image3, Image4, Image5, Image6} = req.body;
+
+    const checkSKU = await Product.findOne({SKU: SKU});
+    if(checkSKU){
+      res.send("Product Exists");
+    }
+
+    const checkName = await Product.findOne({Product_Name: Product_Name});
+    if(checkName){
+      res.send("Product Exists");
+    }
+
+    if(checkSKU || checkName){
+      return 
+    }
+    else {
     await Product.create({
-        product_name: product_name,
-        product_price: product_price,
-        product_asin: product_asin,
-        delete_flag: false,
+        SKU: SKU,
+        EAN_CODE: EAN_CODE,
+        Brand_Name: Brand_Name,
+        Product_Name: Product_Name,
+        HSN_Code: HSN_Code,
+        GST: GST,
+        Description: Description,
+        Bullet1: Bullet1,
+        Bullet2: Bullet2,
+        Bullet3: Bullet3,
+        Bullet4: Bullet4,
+        Bullet5: Bullet5,
+        Item_Weight: Item_Weight,
+        Item_Length: Item_Length,
+        Item_Width: Item_Width,
+        Item_Height: Item_Height,
+        Item_Unit_Measure: Item_Unit_Measure,
+        Country: Country,
+        MRP: MRP,
+        Manufacturer: Manufacturer,
+        Ingredients: Ingredients,
+        Category: Category,
+        Keywords: Keywords,
+        Main_Image: Main_Image,
+        Image1: Image1,
+        Image2: Image2,
+        Image3: Image3,
+        Image4: Image4,
+        Image5: Image5,
+        Image6: Image6,
       }).then(()=>{
         res.send("Product Added");
       }).catch((err) => {
         console.log(err);
       });
+    }
+
   } catch (err) {}
 });
 
-app.get("/competitor/:id", async(req, res) => {
+app.get("/product/:id", async(req, res) => {
   const id = req.params.id;
   const product = await Product.findById(id);
-  var valueArray=[];
   
   if(product){
-    product.competitors.map((value, index)=>{
-      axios.get(`https://api.rainforestapi.com/request?api_key=${process.env.AMAZON_API_KEY}&type=product&asin=${value.comp_asin}&amazon_domain=amazon.in`)
-      .then(function (response) {
-        value.comp_name = response.data.product.title;
-        value.comp_price = response.data.product.buybox_winner.price.value;
-        valueArray.push(value.comp_price);
-        console.log(value.comp_price);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    });
-    // console.log(valueArray);
-    await product.save();
-    res.send(product.competitors);  
+    res.send(product);  
   }else{
     res.send("Product not found");
   }
 
 });
 
-app.put("/productedit/:id", async(req, res) => {
+app.post("/productedit/:id", async(req, res) => {
   const product_id = req.params.id;
   const product = await Product.findById(product_id);
+
+  const {SKU, EAN_CODE, Brand_Name, Product_Name, HSN_Code, GST,
+    Description, Bullet1, Bullet2, Bullet3, Bullet4, Bullet5,
+    Item_Weight, Item_Length, Item_Width, Item_Height, Item_Unit_Measure,
+    Country, MRP, Manufacturer, Ingredients, Category, Keywords,
+    Main_Image, Image1, Image2, Image3, Image4, Image5, Image6} = req.body;
+
   if(product){
-    product.product_name = req.body.name;
-    product.product_price = req.body.price;
-    product.product_image = req.body.image;
+    product.SKU = SKU;
+    product.EAN_CODE = EAN_CODE;
+    product.Brand_Name = Brand_Name;
+    product.Product_Name = Product_Name;
+    product.HSN_Code = HSN_Code;
+    product.GST = GST;
+    product.Description = Description;
+    product.Bullet1 = Bullet1;
+    product.Bullet2 = Bullet2;
+    product.Bullet3 = Bullet3;
+    product.Bullet4 = Bullet4;
+    product.Bullet5 = Bullet5;
+    product.Item_Weight = Item_Weight;
+    product.Item_Length = Item_Length;
+    product.Item_Width = Item_Width;
+    product.Item_Height = Item_Height;
+    product.Item_Unit_Measure = Item_Unit_Measure;
+    product.Country = Country;
+    product.MRP = MRP;
+    product.Manufacturer = Manufacturer;
+    product.Ingredients = Ingredients;
+    product.Category = Category;
+    product.Keywords = Keywords;
+    product.Main_Image = Main_Image;
+    product.Image1 = Image1;
+    product.Image2 = Image2;
+    product.Image3 = Image3;
+    product.Image4 = Image4;
+    product.Image5 = Image5;
+    product.Image6 = Image6;
     await product.save();
     res.send("Product Updated");
   }else{

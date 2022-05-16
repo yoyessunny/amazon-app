@@ -14,9 +14,13 @@ const AddProduct = () => {
     console.log(data);
     axios.post('http://localhost:5000/productregister',data)
     .then(function (response) {
+      if(response.data === "Product Exists"){
+        toast.error("Product Already Exists");
+      }else{
       console.log(response);
-      navigate('/productlist');
+      navigate('/');
       toast.success("Product Added");
+      }
     })
     .catch(function (error) {
       console.log(error);
@@ -108,46 +112,46 @@ const AddProduct = () => {
               </div>
               <div className="form-floating">
                 Bullet Point 1
-              <input type="text" placeholder="Product Reviews"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Bullet1")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Bullet1 ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Bullet Point 2
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Bullet2")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Bullet2 ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Bullet Point 3
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Bullet3")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Bullet3 ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Bullet Point 4
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Bullet4")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Bullet4 ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Bullet Point 5
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Bullet5")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Bullet5 ? "error-input" : ""
                 }`}
               />
               </div>
@@ -155,46 +159,46 @@ const AddProduct = () => {
         <TabPane tab="Product Measurements" key="3">
               <div className="form-floating">
                 Item Weight
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Item_Weight")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Item_Weight ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Item Length
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Item_Length")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Item_Length ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Item Width
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Item_Width")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Item_Width ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Item Height
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Item_Height")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Item_Height ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Item Unit Measure
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Item_Unit_Measure")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Item_Unit_Measure ? "error-input" : ""
                 }`}
               />
               </div>
@@ -202,55 +206,55 @@ const AddProduct = () => {
         <TabPane tab="Product Specifications 2" key="4">
               <div className="form-floating">
                 Country of Origin
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Country")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Country ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 MRP
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder="MRP"
+                {...register("MRP", {required: true})}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.MRP ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Manufacturer
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Manufacturer")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Manufacturer ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Ingredients
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Ingredients")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Ingredients ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Category
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Category")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Category ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Keywords
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Keywords")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Keywords ? "error-input" : ""
                 }`}
               />
               </div>
@@ -258,64 +262,64 @@ const AddProduct = () => {
         <TabPane tab="Images" key="5">
               <div className="form-floating">
                 Main Image
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Main_Image")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Main_Image ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Other Image 1
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Image1")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Image1 ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Other Image 2
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Image2")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Image2 ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Other Image 3
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Image3")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Image3 ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Other Image 4
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Image4")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Image4 ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Other Image 5
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Image5")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Image5 ? "error-input" : ""
                 }`}
               />
               </div>
               <div className="form-floating">
                 Other Image 6
-              <input type="text" placeholder="Product Description"
-                {...register("fullName", {required: true, maxLength: 20})}
+              <input type="text" placeholder=""
+                {...register("Image6")}
                 className={`form-control ${
-                  errors.fullName ? "error-input" : ""
+                  errors.Image6 ? "error-input" : ""
                 }`}
               />
               </div>

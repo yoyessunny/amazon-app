@@ -44,6 +44,7 @@ const ProductListScreen = () => {
         fetchData();
     },[]);
 
+    console.log(products);
 
   return (
     <div>
@@ -74,37 +75,30 @@ const ProductListScreen = () => {
                        <th class="col-sm-2">SKU</th>
                        <th class="col-sm-4">NAME</th>
                        <th class="col-sm-2">PRICE</th>
-                       <th class="col-sm-2">ASIN</th>
+                       <th class="col-sm-2">HSN Code</th>
                        <th class="col-sm-2">ACTIONS</th>
                    </tr>
                </thead>
                <tbody>
                    {
                         products && products.map((item, index) => {
-                            return (<> {(!item.delete_flag)?(
+                            return (<>
                                 <tr key={index}>                                
-                                    <td>{item.product_name}</td>
-                                    <td>{item.product_price}</td>
-                                    <td>{item.product_asin}</td>
+                                    <td>{item.SKU}</td>
+                                    <td>{item.Product_Name}</td>
+                                    <td>{item.MRP}</td>
+                                    <td>{item.HSN_Code}</td>
                                     <td>
                                         <Button
                                         type='button'
                                         variant='light'
-                                        onClick={()=> navigate(`/competitors/${item._id}`)}
-                                        >
-                                            View
-                                        </Button>
-                                        &nbsp;
-                                        <Button
-                                        type='button'
-                                        variant='light'
-                                        onClick={()=> navigate(`/competitors/${item._id}`)}
+                                        onClick={()=> navigate(`/edit/${item._id}`)}
                                         >
                                             Edit
                                         </Button>
                                     </td>
                                 </tr>
-                            ):""}</>);
+                            </>);
                           })
                    }
                </tbody>

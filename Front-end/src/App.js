@@ -10,8 +10,8 @@ import Forgot from './components/Forgot';
 import Register from './components/Register';
 import { useSelector } from 'react-redux';
 import ProductListScreen from './screens/ProductListScreen';
-import Footer from './components/Footer';
-import CompetitorListScreen from './screens/CompetitorListScreen';
+import EditProducts from './components/EditProducts';
+import OrdersScreen from './screens/OrdersScreen';
 
 const App = () => {
 
@@ -33,10 +33,10 @@ const App = () => {
                 (<>
                   <Routes>
                 <Route path="/" exact={true} element={<ProductListScreen/>} />
-                <Route path="/competitors/:id" exact={true} element={<CompetitorListScreen/>} />
+                <Route path="/edit/:id" exact={true} element={<EditProducts/>} />
                 <Route path="/add" exact={true} element={<AddProducts/>} />
+                <Route path="/orders" exact={true} element={<OrdersScreen/>} />
                 </Routes>
-                <Footer />
                 </>)
                 :   
                 <Routes>
