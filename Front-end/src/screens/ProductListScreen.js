@@ -72,11 +72,11 @@ const ProductListScreen = () => {
            <table className='table'>
                <thead>
                    <tr>
-                       <th class="col-sm-2">SKU</th>
-                       <th class="col-sm-4">NAME</th>
-                       <th class="col-sm-2">PRICE</th>
-                       <th class="col-sm-2">HSN Code</th>
-                       <th class="col-sm-2">ACTIONS</th>
+                       <th className="col-sm-2">SKU</th>
+                       <th className="col-sm-4">NAME</th>
+                       <th className="col-sm-2">PRICE</th>
+                       <th className="col-sm-2">HSN Code</th>
+                       <th className="col-sm-2">ACTIONS</th>
                    </tr>
                </thead>
                <tbody>

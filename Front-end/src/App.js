@@ -28,7 +28,7 @@ const App = () => {
       <BrowserRouter>
       <Navbar />
       <Sidebar />
-      <div style={{marginLeft:"160px"}}>
+      <div style={{marginLeft:"120px"}}>
                 { loginname ?
                 (<>
                   <Routes>

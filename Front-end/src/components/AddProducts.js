@@ -92,12 +92,18 @@ const AddProduct = () => {
               </div>
               <div className="form-floating">
                 GST
-              <input type="text" placeholder="GST"
-                {...register("GST", {required: true})}
-                className={`form-control ${
-                  errors.GST ? "error-input" : ""
-                }`}
-              />
+              <select
+                className="m-3"
+                {...register('GST')}>
+                <option value="">Select...</option>
+                <option value="0">GST_0</option>
+                <option value="3">GST_3</option>
+                <option value="5">GST_5</option>
+                <option value="12">GST_12</option>
+                <option value="18">GST_18</option>
+                <option value="28">GST_28</option>
+                <option value="APPAREL">GST_APPAREL</option>
+              </select>
               </div>
         </TabPane>
         <TabPane tab="Product Description" key="2">

@@ -140,11 +140,19 @@ const EditProducts = () => {
               </Form.Group>
               <div className="form-floating">
                 GST
-              <input type="text"
+              <select
+                className="m-3"
                 defaultValue={product.GST}
-                className="form-control"
-                onChange={(e)=>setGST(e.target.value)}
-              />
+                onChange={(e)=>setGST(e.target.value)}>
+                <option value="">Select...</option>
+                <option value="0">GST_0</option>
+                <option value="3">GST_3</option>
+                <option value="5">GST_5</option>
+                <option value="12">GST_12</option>
+                <option value="18">GST_18</option>
+                <option value="28">GST_28</option>
+                <option value="APPAREL">GST_APPAREL</option>
+              </select>
               </div>
         </TabPane>
         <TabPane tab="Product Description" key="2">
