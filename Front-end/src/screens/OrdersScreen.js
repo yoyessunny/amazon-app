@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Tabs } from 'antd';
 import * as XLSX from 'xlsx';
@@ -30,7 +30,9 @@ const OrdersScreen = () => {
       error: '',
     });
 
-    
+    const [updateFlag, setUpdateFlag] = useState(false);
+    const [file, setFile] = useState(null);
+
     useEffect(() => {
       const fetchData = async() => {
           try{
@@ -42,9 +44,9 @@ const OrdersScreen = () => {
           }
       }
       fetchData();
-    },[]);
+    },[updateFlag]);
 
-    const readExcel = (file) => {
+    const readExcel = () => {
       const promise = new Promise((resolve,reject) => {
         const fileReader = new FileReader();
         fileReader.readAsArrayBuffer(file);
@@ -54,13 +56,6 @@ const OrdersScreen = () => {
           const wsname = wb.SheetNames[0];
           const ws = wb.Sheets[wsname];
           var data = XLSX.utils.sheet_to_json(ws);
-          data = JSON.stringify(data);
-          var matchArray = data.match( /\D\-\D/gm,"_");
-          for(let matchArrayIndex=0;matchArrayIndex<matchArray.length;matchArrayIndex++){
-            let underscoreReplace = matchArray[matchArrayIndex].replace("-","_");
-            data = data.replace(matchArray[matchArrayIndex],underscoreReplace);
-          }
-          data = JSON.parse(data);
           resolve(data);
         };
         fileReader.onerror=(error)=>{
@@ -69,10 +64,12 @@ const OrdersScreen = () => {
       });
 
       promise.then((d)=>{
+        console.log(d);
         axios.post('http://localhost:5000/orderimport',d)
           .then(function (response) {
             console.log(response);
-            toast.success("Orders Added");
+            toast.success(response.data);
+            setUpdateFlag(!updateFlag);
           })
           .catch(function (error) {
             console.log(error);
@@ -179,8 +176,9 @@ const OrdersScreen = () => {
         }
         </TabPane>
         <TabPane tab="Import" key="2">        
-            <div>
-                <input type="file" onChange={(e)=>{const file = e.target.files[0]; readExcel(file);}} />
+            <div className='d-flex'>
+                <input type="file" onChange={(e)=>setFile(e.target.files[0])} />
+                <button onClick={readExcel} className="btn btn-primary">Upload</button>
             </div>
         </TabPane>
         <TabPane tab="Export" key="3">

@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import ProductListScreen from './screens/ProductListScreen';
 import EditProducts from './components/EditProducts';
 import OrdersScreen from './screens/OrdersScreen';
+import PaymentsScreen from './screens/PaymentsScreen';
 
 const App = () => {
 
@@ -36,6 +37,7 @@ const App = () => {
                 <Route path="/edit/:id" exact={true} element={<EditProducts/>} />
                 <Route path="/add" exact={true} element={<AddProducts/>} />
                 <Route path="/orders" exact={true} element={<OrdersScreen/>} />
+                <Route path="/payments" exact={true} element={<PaymentsScreen/>} />
                 </Routes>
                 </>)
                 :   

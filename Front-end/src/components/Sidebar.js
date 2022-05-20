@@ -26,6 +26,11 @@ const Sidebar = () => {
           Orders
         </Link>
       </li>
+      <li>
+        <Link to="/payments" className="nav-link">
+          Payments
+        </Link>
+      </li>
     </ul>
     </div>
     </div>

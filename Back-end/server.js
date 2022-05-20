@@ -3,10 +3,11 @@ const axios = require("axios");
 const mongoose = require("mongoose");
 const Admin = require("./model/admin");
 const Product = require("./model/product");
-const Order = require("./model/order");
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
 const bcrypt = require('bcrypt');
 const {createTokens, validateToken} = require("./JWT");
 
@@ -15,6 +16,18 @@ var cors = require('cors');
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+  key: "userId",
+  secret: "subscribe",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    expires: 60*60*24*30*1000,
+  },
+})
+);
+
 
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -24,6 +37,12 @@ mongoose
   .catch((err) => {
     console.log(err.message);
   });
+
+const router = require('./routes/order');
+app.use(router);
+
+const paymentrouter = require('./routes/payment');
+app.use(paymentrouter);
 
 app.post("/login", async(req, res) => {
   const {email, password} = req.body;
@@ -260,69 +279,6 @@ app.post("/competitorregister/:id", async(req, res) => {
   }else{
     res.send("Product not found");
   }
-});
-
-
-app.get("/order", async(req, res) => {
-  const orders = await Order.find();
-  if(orders){
-  res.send(orders); }
-});
-
-
-app.post("/orderimport", async(req, res) => {
-  try{
-
-    const arrayData = req.body;
-
-    arrayData.map((val)=>{
-
-        const check = Order.findOne({amazon_order_id: val.amazon_order_id}); 
-        res.send(check);       
-        // if(!check) {
-            Order.create({
-              amazon_order_id: val.amazon_order_id,
-              merchant_order_id: val.merchant_order_id,
-              purchase_date: val.purchase_date,
-              last_updated_date: val.last_updated_date,
-              order_status: val.order_status,
-              fulfillment_channel: val.fulfillment_channel,
-              sales_channel: val.sales_channel,
-              order_channel: val.order_channel,
-              url: val.url,
-              ship_service_level: val.ship_service_level,
-              product_name: val.product_name,
-              sku: val.sku,
-              asin: val.asin,
-              item_status: val.item_status,
-              quantity: val.quantity,
-              currency: val.currency,
-              item_price: val.item_price,
-              item_tax: val.item_tax,
-              shipping_price: val.shipping_price,
-              shipping_tax: val.shipping_tax,
-              gift_wrap_price: val.gift_wrap_price,
-              gift_wrap_tax: val.gift_wrap_tax,
-              item_promotion_discount: val.item_promotion_discount,
-              ship_promotion_discount: val.ship_promotion_discount,
-              ship_city: val.ship_city,
-              ship_state: val.ship_state,
-              ship_postal_code: val.ship_postal_code,
-              ship_country: val.ship_country,
-              promotion_ids: val.promotion_ids,
-              is_business_order: val.is_business_order,
-              purchase_order_number: val.purchase_order_number,
-              price_designation: val.price_designation,
-              fulfilled_by: val.fulfilled_by,
-              is_iba: val.is_iba,
-              }).then(()=>{
-                res.send("Order Added");
-              }).catch((err) => {
-                console.log(err);
-              });  
-        // }
-    })
-  } catch (err) {}
 });
 
 

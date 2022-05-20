@@ -24,7 +24,7 @@ const reducer = (state, action) => {
     }
 }
 
-const CompetitorListScreen = () => {
+const SingleOrderScreen = () => {
 
     const [registerAsin, setRegisterAsin] = useState("");
     const [registerFlag, setRegisterFlag] = useState(false);
@@ -158,4 +158,4 @@ const CompetitorListScreen = () => {
   )
 }
 
-export default CompetitorListScreen;
+export default SingleOrderScreen;
