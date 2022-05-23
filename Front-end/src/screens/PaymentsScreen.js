@@ -57,9 +57,9 @@ const PaymentsScreen = () => {
           const wsname = wb.SheetNames[0];
           const ws = wb.Sheets[wsname];
           var data = XLSX.utils.sheet_to_json(ws);
-          // data = JSON.stringify(data);
-          // data = data.replace(/\s+["\r"]/gm,"");
-          // data = JSON.parse(data);
+          data = JSON.stringify(data);
+          data = data.replace(/\\r|\\n|\\t/gm,"");
+          data = JSON.parse(data);
           resolve(data);
         };
         fileReader.onerror=(error)=>{

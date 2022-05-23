@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Login.css';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Login = () => {
 
@@ -27,10 +28,10 @@ const Login = () => {
     axios(config)
     .then(function (response) {
       console.log(response);
-      let loginname = "";
-      if(loginResponse){
-      loginname = response.data;
-      }
+      const loginname = response.data;
+      Cookies.set("loginname",loginname,{
+        expires: 30
+      })
       dispatch({
         type:'add',
         item: loginname
@@ -90,4 +91,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Login;

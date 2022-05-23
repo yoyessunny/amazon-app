@@ -1,10 +1,14 @@
+import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
 
-  const loginname = useSelector((state) => state.loginName);
+  var loginname = useSelector((state) => state.loginName);
+  if(loginname === ""){
+    loginname = Cookies.get("loginname");
+  }
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,6 +17,7 @@ const Navbar = () => {
     dispatch({
       type:'delete'
     });
+    Cookies.remove("loginname");
   }
 
   let menu;

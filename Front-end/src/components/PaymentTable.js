@@ -40,7 +40,10 @@ const PaymentTable = (props) => {
           </thead>
           <tbody>
             {props.items && props.items.map((d,index)=>{
-              return((d.type.includes(props.viewType))?(
+              return(((props.viewType === "Other")?(!(d.type.includes("Order")||
+              d.type.includes("Adjustment")||d.type.includes("FBA Inventory Fee")||d.type.includes("Refund")
+              ||d.type.includes("Service Fee")||d.type.includes("Tax Withheld")||
+              d.type.includes("Transfer"))):(d.type.includes(props.viewType)))?(
                 <tr key={index}>
                   <td>{d.date_time}</td>
                   <td>{d.settlement_id}</td>

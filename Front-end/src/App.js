@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import {BrowserRouter,Routes, Route} from 'react-router-dom';
@@ -13,16 +13,22 @@ import ProductListScreen from './screens/ProductListScreen';
 import EditProducts from './components/EditProducts';
 import OrdersScreen from './screens/OrdersScreen';
 import PaymentsScreen from './screens/PaymentsScreen';
+import SingleOrderScreen from './screens/SingleOrderScreen';
+import Cookies from 'js-cookie';
 
 const App = () => {
 
-  const loginname = useSelector((state) => state.loginName);
+  var loginname = useSelector((state) => state.loginName);
 
-  useEffect(() => {
-    if ((loginname) && (window.location.href !== 'http://localhost:3000/')) {
-      window.location.replace('/')
-    }
-  }, [loginname]);
+  if(loginname === ""){
+    loginname = Cookies.get("loginname");
+  }
+
+  // useEffect(() => {
+  //   if ((loginname) && (window.location.href !== 'http://localhost:3000/')) {
+  //     window.location.replace('/')
+  //   }
+  // }, [loginname]);
 
   return (
     <div className='app'>
@@ -37,6 +43,7 @@ const App = () => {
                 <Route path="/edit/:id" exact={true} element={<EditProducts/>} />
                 <Route path="/add" exact={true} element={<AddProducts/>} />
                 <Route path="/orders" exact={true} element={<OrdersScreen/>} />
+                <Route path="/orders/:id" exact={true} element={<SingleOrderScreen/>} />
                 <Route path="/payments" exact={true} element={<PaymentsScreen/>} />
                 </Routes>
                 </>)

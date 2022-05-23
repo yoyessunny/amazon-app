@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 import {toast} from 'react-toastify';
+import BasicTable from '../components/BasicTable';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -90,88 +91,7 @@ const OrdersScreen = () => {
         : 
         error ? <div>{error}</div>
         : (      
-        <table className="table" style={{overflowX: 'scroll !important', whiteSpace: 'nowrap',}}>
-          <thead>
-            <tr>
-              <th scope="col" className="col-sm-2">Order ID</th>
-              <th scope="col" className="col-sm-2">Merchant Order ID</th>
-              <th scope="col" className="col-sm-2">Purchase Date</th>
-              <th scope="col" className="col-sm-2">Last Updated Date</th>
-              <th scope="col" className="col-sm-2">Order Status</th>
-              <th scope="col" className="col-sm-2">Fulfillment Channel</th>
-              <th scope="col" className="col-sm-2">Sales Channel</th>
-              <th scope="col" className="col-sm-2">Order Channel</th>
-              <th scope="col" className="col-sm-2">URL</th>
-              <th scope="col" className="col-sm-2">Ship Service Level</th>
-              <th scope="col" className="col-sm-4">Product Name</th>
-              <th scope="col" className="col-sm-2">SKU</th>
-              <th scope="col" className="col-sm-2">ASIN</th>
-              <th scope="col" className="col-sm-2">Item Status</th>
-              <th scope="col" className="col-sm-2">Quantity</th>
-              <th scope="col" className="col-sm-2">Currency</th>
-              <th scope="col" className="col-sm-2">Item Price</th>
-              <th scope="col" className="col-sm-2">Item Tax</th>
-              <th scope="col" className="col-sm-2">Shipping Price</th>
-              <th scope="col" className="col-sm-2">Shipping Tax</th>
-              <th scope="col" className="col-sm-2">Gift Wrap Price</th>
-              <th scope="col" className="col-sm-2">Gift Wrap Tax</th>
-              <th scope="col" className="col-sm-2">Item Promotion Discount</th>
-              <th scope="col" className="col-sm-2">Ship Promotion Discount</th>
-              <th scope="col" className="col-sm-2">Ship City</th>
-              <th scope="col" className="col-sm-2">Ship State</th>
-              <th scope="col" className="col-sm-2">Ship Postal Code</th>
-              <th scope="col" className="col-sm-2">Ship Country</th>
-              <th scope="col" className="col-sm-2">Promotion Id's</th>
-              <th scope="col" className="col-sm-2">Is Business Order</th>
-              <th scope="col" className="col-sm-2">Purchase Order Number</th>
-              <th scope="col" className="col-sm-2">Price Designation</th>
-              <th scope="col" className="col-sm-2">Fulfilled By</th>
-              <th scope="col" className="col-sm-2">Is Iba</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items && items.map((d,index)=>{
-              return(
-                <tr key={index}>
-                  <td>{d.amazon_order_id}</td>
-                  <td>{d.merchant_order_id}</td>
-                  <td>{d.purchase_date}</td>
-                  <td>{d.last_updated_date}</td>
-                  <td>{d.order_status}</td>
-                  <td>{d.fulfillment_channel}</td>
-                  <td>{d.sales_channel}</td>
-                  <td>{d.order_channel}</td>
-                  <td>{d.url}</td>
-                  <td>{d.ship_service_level}</td>
-                  <td>{d.product_name}</td>
-                  <td>{d.sku}</td>
-                  <td>{d.asin}</td>
-                  <td>{d.item_status}</td>
-                  <td>{d.quantity}</td>
-                  <td>{d.currency}</td>
-                  <td>{d.item_price}</td>
-                  <td>{d.item_tax}</td>
-                  <td>{d.shipping_price}</td>
-                  <td>{d.shipping_tax}</td>
-                  <td>{d.gift_wrap_price}</td>
-                  <td>{d.gift_wrap_tax}</td>
-                  <td>{d.item_promotion_discount}</td>
-                  <td>{d.ship_promotion_discount}</td>
-                  <td>{d.ship_city}</td>
-                  <td>{d.ship_state}</td>
-                  <td>{d.ship_postal_code}</td>
-                  <td>{d.ship_country}</td>
-                  <td>{d.promotion_ids}</td>
-                  <td>{d.is_business_order}</td>
-                  <td>{d.purchase_order_number}</td>
-                  <td>{d.price_designation}</td>
-                  <td>{d.fulfilled_by}</td>
-                  <td>{d.is_iba}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <BasicTable items={items} />
         )
         }
         </TabPane>

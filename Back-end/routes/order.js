@@ -1,13 +1,36 @@
 const express = require('express');
 const router = express.Router();
 const Order = require("../model/order");
+const Payment = require("../model/payment");
 
 router.get("/order", async(req, res) => {
     const orders = await Order.find();
     if(orders){
     res.send(orders); }
   });
+
+
+  router.get("/order/:id", async(req, res) => {
+    const id = req.params.id;
+    const order = await Order.findOne({amazon_order_id: id});
+    if(order){
+      res.send(order);
+    }else{
+      res.send("Order not found");
+    }
+  });
   
+
+  router.get("/orderpayment/:id", async(req, res) => {
+    const OrderID = req.params.id;
+    const payments = await Payment.find({order_id: OrderID});
+    if(payments){
+      res.send(payments);
+    }else{
+      res.send("Payment not found");
+    }
+  });
+
   
   var i = 0;
 
