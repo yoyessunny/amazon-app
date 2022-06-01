@@ -9,6 +9,9 @@ const productschema = new Schema({
         required: true,
         unique: true,
     },
+    ASIN: {
+        type: String,
+    },
     EAN_CODE: {
         type: String,
     },

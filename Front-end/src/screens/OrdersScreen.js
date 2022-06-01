@@ -83,11 +83,13 @@ const OrdersScreen = () => {
 
   return (
     <div className='container'>
-       <h1>Orders</h1>
+       <h1 style={{position:'sticky',top:'60px',backgroundColor:'white',zIndex:'10'}}>Orders</h1>
       <Tabs defaultActiveKey="1">
         <TabPane tab="View" key="1">
         {
-        loading ? <div>Loading...</div>
+        loading ? <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
         : 
         error ? <div>{error}</div>
         : (      

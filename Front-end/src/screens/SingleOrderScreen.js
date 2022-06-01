@@ -83,10 +83,14 @@ const SingleOrderScreen = () => {
 
   return (
     <div className='container'>
-        {loading && <div>Loading...</div>}
+        {loading && <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>}
 
         {
-        loading ? <div>Loading...</div>
+        loading ? <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
         : 
         error ? <div>{error}</div>
         : (

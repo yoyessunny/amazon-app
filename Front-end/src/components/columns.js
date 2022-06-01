@@ -1,3 +1,5 @@
+import {format} from 'date-fns';
+
 export const COLUMNS = [
     {
         Header: 'Order ID',
@@ -9,11 +11,13 @@ export const COLUMNS = [
     },
     {
         Header: 'Purchase Date',
-        accessor: 'purchase_date'
+        accessor: 'purchase_date',
+        Cell: ({value}) => { return format(new Date(value), 'dd/MM/yyyy')}
     },
     {
         Header: 'Last Updated Date',
-        accessor: 'last_updated_date'
+        accessor: 'last_updated_date',
+        Cell: ({value}) => { return format(new Date(value), 'dd/MM/yyyy')}
     },
     {
         Header: 'Order Status',

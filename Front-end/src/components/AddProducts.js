@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -10,9 +10,24 @@ const AddProduct = () => {
 
   const navigate = useNavigate();
 
+  const [uploadedFile, setUploadedFile] = useState([]);
+
+  function onFileChange(e) {
+    setUploadedFile([...e.target.files]);
+  }
+
   const submitProduct = (data) => {
-    console.log(data);
-    axios.post('http://localhost:5000/productregister',data)
+    var formData = new FormData();
+    formData.append('SKU', data.SKU);
+    formData.append('EAN_CODE', data.EAN_CODE);
+    formData.append('Brand_Name', data.Brand_Name);
+    formData.append('Product_Name', data.Product_Name);
+    formData.append('HSN_Code', data.HSN_Code);
+    formData.append('GST', data.GST);
+    formData.append('MRP', data.MRP);
+    formData.append('Document_Name', data.Document_Name);
+    formData.append('file', uploadedFile[0]);
+    axios.post('http://localhost:5000/productregister',formData)
     .then(function (response) {
       if(response.data === "Product Exists"){
         toast.error("Product Already Exists");
@@ -35,7 +50,7 @@ const AddProduct = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-  
+
 
   return (
     <div className="container">
@@ -327,6 +342,19 @@ const AddProduct = () => {
                 className={`form-control ${
                   errors.Image6 ? "error-input" : ""
                 }`}
+              />
+              </div>
+        </TabPane>
+        <TabPane tab="Documents" key="6">
+                <div className="form-floating">
+                Document Name
+              <input type="text" placeholder=""
+                {...register("Document_Name")}
+                className={`form-control ${
+                  errors.Image6 ? "error-input" : ""
+                }`}
+              />  
+              <input type="file" onChange={onFileChange}
               />
               </div>
         </TabPane>

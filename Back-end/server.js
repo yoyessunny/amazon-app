@@ -3,6 +3,7 @@ const axios = require("axios");
 const mongoose = require("mongoose");
 const Admin = require("./model/admin");
 const Product = require("./model/product");
+const Order = require("./model/order");
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bodyParser = require("body-parser");
@@ -10,6 +11,8 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bcrypt = require('bcrypt');
 const {createTokens, validateToken} = require("./JWT");
+// const multer = require('multer');
+const upload = require('express-fileupload');
 
 const app = express();
 var cors = require('cors');
@@ -27,6 +30,17 @@ app.use(session({
   },
 })
 );
+app.use(upload());
+// const fileStorage = multer.diskStorage({
+//   destination: (req,file,cb) => {
+//     cb(null, 'documents');
+//   },
+//   filename: (req,file,cb) => {
+//     cb(null, new Date().toISOString() + '-' + file.originalname);
+//   }
+// });
+
+// app.use(multer({storage: fileStorage}).single('document'));
 
 
 mongoose
@@ -94,6 +108,31 @@ app.post("/user", validateToken, async(req, res) => {
 });
 
 app.get("/product", async(req, res) => {
+
+  try{
+  
+    const arrayData = await Order.find();
+
+    const arrData = Array.from(new Set(arrayData.map(JSON.stringify))).map(JSON.parse);
+
+    arrData.map(async(val)=>{
+
+        const check = await Product.findOne({SKU: val.sku, ASIN: val.asin}); 
+        if(check===null) {
+            await Product.create({
+              SKU: val["sku"],
+              ASIN: val["asin"],
+              Product_Name: val["product_name"],
+              MRP: val["item_price"],
+              }).then(()=>{
+                
+              }).catch((err) => {
+                console.log(err);
+              });  
+        }
+    })
+  } catch (err) {}
+
   const products = await Product.find();
   if(products){
   res.send(products); }
@@ -106,7 +145,13 @@ app.post("/productregister", async(req, res) => {
       Description, Bullet1, Bullet2, Bullet3, Bullet4, Bullet5,
       Item_Weight, Item_Length, Item_Width, Item_Height, Item_Unit_Measure,
       Country, MRP, Manufacturer, Ingredients, Category, Keywords,
-      Main_Image, Image1, Image2, Image3, Image4, Image5, Image6} = req.body;
+      Main_Image, Image1, Image2, Image3, Image4, Image5, Image6, Document_Name} = req.body;
+
+    const {file} = req.files;
+    const extension = file.name.split(".");
+    const DocumentName = Document_Name.replace(/\s+/g, '_');
+    const filename = SKU+'-'+DocumentName+'.'+extension[1];
+    file.mv(__dirname + "/documents/" + filename)
 
     const checkSKU = await Product.findOne({SKU: SKU});
     if(checkSKU){

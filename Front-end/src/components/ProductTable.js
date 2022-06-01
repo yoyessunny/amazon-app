@@ -1,23 +1,27 @@
 import React,{useMemo,useState} from 'react';
-import {useTable, useSortBy} from 'react-table';
-import {COLUMNS} from './columnsPayment';
+import {useTable, usePagination, useSortBy} from 'react-table';
+import {COLUMNS} from './columnsProducts';
 import { Modal, Button } from 'antd';
 import 'antd/dist/antd.css';
+import { useNavigate } from 'react-router-dom';
 
-const PaymentTable = (props) => {
-  
-  
-    console.log(props.items);
+const ProductTable = (props) => {
 
     const columns = useMemo(() => COLUMNS, []);
     const data = useMemo(() => props.items, [props.items]);
+    
+    const navigate = useNavigate();
 
     const tableInstance = useTable({
         columns: columns,
         data: data
-    }, useSortBy);
+    }, useSortBy, usePagination);
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, allColumns} = tableInstance;
+    const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow, allColumns, 
+    nextPage, previousPage, canNextPage, canPreviousPage, pageOptions, state, gotoPage,
+    pageCount, setPageSize} = tableInstance;
+
+    const {pageIndex, pageSize} = state;
 
     //Modal
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,17 +40,11 @@ const PaymentTable = (props) => {
 
   return (
     <> 
-    <h1 style={{position:"sticky",top:"65px",backgroundColor:"white",zIndex:"10"}}>{props.viewType}</h1>
     <div className='text-end' style={{position: "fixed",right: "10px",top: "20%",zIndex:"99"}}>
     <Button onClick={showModal}>
     <i class="fa-solid fa-gear"></i>
     </Button>
     </div>
-        {
-        props.loading ? <div>Loading...</div>
-        : 
-        props.error ? <div>{props.error}</div>
-        : (  
     <table className="table" style={{overflowX: 'scroll !important', whiteSpace: 'nowrap',}} 
     {...getTableProps()}>
     <thead style={{position: 'sticky', top: '113px', backgroundColor:'white'}}>
@@ -70,36 +68,61 @@ const PaymentTable = (props) => {
     </thead>
     <tbody {...getTableBodyProps()}>
         {
-            rows.map((row) => {
+            page.map((row) => {
                 prepareRow(row)
-                return( 
-                    ((props.viewType === "Other")?(!(row.values.type.includes("Order")||
-                row.values.type.includes("Adjustment")||row.values.type.includes("FBA Inventory Fee")||row.values.type.includes("Refund")
-                ||row.values.type.includes("Service Fee")||row.values.type.includes("Tax Withheld")||
-                row.values.type.includes("Transfer"))):
-                (props.viewType === "All")?(row.values.type.includes("Order")||
-                row.values.type.includes("Adjustment")||row.values.type.includes("FBA Inventory Fee")||row.values.type.includes("Refund")
-                ||row.values.type.includes("Service Fee")||row.values.type.includes("Tax Withheld")||
-                row.values.type.includes("Transfer")):
-                (row.values.type.includes(props.viewType)))
-                  ?
-                   ( <tr {...row.getRowProps()}>
+                return(
+                    <tr {...row.getRowProps()}>
                         {
                             row.cells.map((cell, index) => {
-                                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                return (index !== 5)
+                                ?
+                                <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                : 
+                                (
+                                    <td>
+                                        <Button
+                                        type='button'
+                                        variant='light'
+                                        onClick={()=> navigate(`/edit/${cell.value}`)}
+                                        >
+                                            Edit
+                                        </Button>
+                                    </td>
+                                )
                             })
                         }
                     </tr>
-                  ) 
-                  : ""
             );
             })
         }  
     </tbody>
   </table>
-        )
-        }
-  
+
+  <div>
+      <span>
+          Page{' '}<strong>{pageIndex+1} of {pageOptions.length}</strong>{' '}
+      </span>
+      <span>
+          | Go to Page: {' '}
+          <input type="number" defaultValue={pageIndex + 1} 
+          onChange={(e)=>{const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
+          gotoPage(pageNumber)}} style={{width:"50px"}} />{' '}
+      </span>
+      <select value={pageSize} onChange={(e)=>setPageSize(Number(e.target.value))}>
+            {
+                [10,25,50].map(pageSize=>(
+                    <option key={pageSize} value={pageSize}>
+                        Show {pageSize}
+                    </option>
+                ))
+            }
+      </select>
+      <Button onClick={()=> gotoPage(0)} disabled={!canPreviousPage}>{'<<'}</Button>
+      <Button onClick={()=> previousPage()} disabled={!canPreviousPage}>Previous</Button>
+      <Button onClick={()=> nextPage()} disabled={!canNextPage}>Next</Button>
+      <Button onClick={()=> gotoPage(pageCount-1)} disabled={!canNextPage}>{'>>'}</Button>
+  </div>
+
     <Modal title="Table Settings" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
     <div>
         {
@@ -119,4 +142,4 @@ const PaymentTable = (props) => {
   )
 }
 
-export default PaymentTable;
+export default ProductTable;

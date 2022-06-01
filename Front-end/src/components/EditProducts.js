@@ -333,6 +333,11 @@ const EditProducts = () => {
               />
               </div>
         </TabPane>
+        <TabPane tab="Documents" key="6">
+          <div>
+            Documents
+          </div>
+        </TabPane>
       </Tabs>
       </div>
       <div className='m-5'>

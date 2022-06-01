@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 const Sidebar = () => {
   return (
     <div>
-    <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidenav" style={{top:"0px"}}>
+    <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidenav" style={{top:"0px",zIndex:"10000"}}>
     <ul className="nav nav-pills flex-column mb-auto">
       <li className="nav-item">
         <Link to="/" className="nav-link">
@@ -17,8 +17,8 @@ const Sidebar = () => {
         </Link>
       </li>
       <li>
-        <Link to="/" className="nav-link">
-          Inventory
+        <Link to="/product" className="nav-link">
+          Products
         </Link>
       </li>
       <li>
@@ -27,9 +27,42 @@ const Sidebar = () => {
         </Link>
       </li>
       <li>
-        <Link to="/payments" className="nav-link">
+      <div className="accordion" id="accordionExample">
+          <Link to="/payments" className="nav-link" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           Payments
-        </Link>
+          </Link>
+        <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div className="accordion-body">
+            <Link to="/payments" className="nav-link">
+              Import
+            </Link>          
+            <Link to="/payments/order" className="nav-link">
+              Order
+            </Link>
+            <Link to="/payments/adjustment" className="nav-link">
+              Adjustment
+            </Link>
+            <Link to="/payments/fbainventoryfee" className="nav-link">
+              FBA Inventory Fee
+            </Link>
+            <Link to="/payments/refund" className="nav-link">
+              Refund
+            </Link>
+            <Link to="/payments/servicefee" className="nav-link">
+              Service Fee
+            </Link>
+            <Link to="/payments/taxwithheld" className="nav-link">
+              Tax Withheld
+            </Link>
+            <Link to="/payments/transfer" className="nav-link">
+              Transfer
+            </Link>
+            <Link to="/payments/other" className="nav-link">
+              Other
+            </Link>
+          </div>
+        </div>
+      </div>
       </li>
     </ul>
     </div>

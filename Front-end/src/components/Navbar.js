@@ -38,7 +38,7 @@ const Navbar = () => {
   }
 
   return (
-    <div style={{marginLeft: "160px"}}>
+    <div style={{marginLeft: "120px",position:"sticky",top:"0px",backgroundColor:'white',zIndex:"10"}}>
       <header className="p-3 bg-light text-black">
         <div className="container">
           <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between">

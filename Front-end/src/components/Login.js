@@ -27,7 +27,6 @@ const Login = () => {
     };
     axios(config)
     .then(function (response) {
-      console.log(response);
       const loginname = response.data;
       Cookies.set("loginname",loginname,{
         expires: 30

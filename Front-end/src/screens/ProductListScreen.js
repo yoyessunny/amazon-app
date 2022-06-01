@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import 'antd/dist/antd.css';
+import ProductTable from '../components/ProductTable';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -44,11 +45,9 @@ const ProductListScreen = () => {
         fetchData();
     },[]);
 
-    console.log(products);
-
   return (
     <div>
-        <Row>
+        <Row style={{position:'sticky',top:'65px',backgroundColor:'white'}}>
             <Col>
         <h1>Products</h1>
             </Col>
@@ -61,48 +60,19 @@ const ProductListScreen = () => {
             </Col>
         </Row>
 
-        {loading && <div>Loading...</div>}
+        {loading && <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                    </div>}
 
         {
-        loading ? <div>Loading...</div>
+        loading ?   <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
         : 
         error ? <div>{error}</div>
         : (
-           <>
-           <table className='table'>
-               <thead>
-                   <tr>
-                       <th className="col-sm-2">SKU</th>
-                       <th className="col-sm-4">NAME</th>
-                       <th className="col-sm-2">PRICE</th>
-                       <th className="col-sm-2">HSN Code</th>
-                       <th className="col-sm-2">ACTIONS</th>
-                   </tr>
-               </thead>
-               <tbody>
-                   {
-                        products && products.map((item, index) => {
-                            return (<>
-                                <tr key={index}>                                
-                                    <td>{item.SKU}</td>
-                                    <td>{item.Product_Name}</td>
-                                    <td>{item.MRP}</td>
-                                    <td>{item.HSN_Code}</td>
-                                    <td>
-                                        <Button
-                                        type='button'
-                                        variant='light'
-                                        onClick={()=> navigate(`/edit/${item._id}`)}
-                                        >
-                                            Edit
-                                        </Button>
-                                    </td>
-                                </tr>
-                            </>);
-                          })
-                   }
-               </tbody>
-           </table>
+           <>             
+           <ProductTable items={products} />
            </> 
         )}
 
