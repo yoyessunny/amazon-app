@@ -64,6 +64,31 @@ const Sidebar = () => {
         </div>
       </div>
       </li>
+      <li>
+      <div className="accordion" id="accordionExample">
+          <Link to="/inventory" className="nav-link" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          Inventory
+          </Link>
+        <div id="collapseTwo" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div className="accordion-body">
+            <Link to="/inventory" className="nav-link">
+              All
+            </Link>
+            <Link to="/payments" className="nav-link">
+              FBA
+            </Link>          
+            <Link to="/payments/order" className="nav-link">
+              MFN
+            </Link>
+          </div>
+        </div>
+      </div>
+      </li>
+      <li>
+        <Link to="/shipment" className="nav-link">
+          Shipment
+        </Link>
+      </li>
     </ul>
     </div>
     </div>

@@ -10,11 +10,29 @@ const AddProduct = () => {
 
   const navigate = useNavigate();
 
+  const [docs, setDocs] = useState([]);
   const [uploadedFile, setUploadedFile] = useState([]);
+  const [No_of_files, setNo_of_files] = useState(0);
 
-  function onFileChange(e) {
-    setUploadedFile([...e.target.files]);
+  function onFileChange(e,i) {
+    const inputData = [...docs];
+    inputData[i] = [...e.target.files];
+    setUploadedFile(inputData);
+    setDocs(inputData);
   }
+
+  const handleAddDocs = () => {
+    const abc = [...docs,[]];
+    setDocs(abc);
+    setNo_of_files(No_of_files + 1);
+  };
+
+  const handleDeleteDocs = (i) => {
+    const deleteVal = [...docs];
+    deleteVal.splice(i,1);
+    setDocs(deleteVal);
+    setUploadedFile(deleteVal);
+  };
 
   const submitProduct = (data) => {
     var formData = new FormData();
@@ -26,14 +44,22 @@ const AddProduct = () => {
     formData.append('GST', data.GST);
     formData.append('MRP', data.MRP);
     formData.append('Document_Name', data.Document_Name);
-    formData.append('file', uploadedFile[0]);
+    formData.append('No_of_files', No_of_files);
+    docs && docs.map((data,i)=>{
+      return (
+      formData.append(`file${i}`, uploadedFile[i][0])
+      )
+    })
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0]+ ', ' + pair[1]); 
+    // }
     axios.post('http://localhost:5000/productregister',formData)
     .then(function (response) {
       if(response.data === "Product Exists"){
         toast.error("Product Already Exists");
       }else{
       console.log(response);
-      navigate('/');
+      navigate('/product');
       toast.success("Product Added");
       }
     })
@@ -50,7 +76,6 @@ const AddProduct = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-
 
   return (
     <div className="container">
@@ -346,6 +371,9 @@ const AddProduct = () => {
               </div>
         </TabPane>
         <TabPane tab="Documents" key="6">
+          {
+            docs && docs.map((data,i)=>{
+              return (
                 <div className="form-floating">
                 Document Name
               <input type="text" placeholder=""
@@ -354,9 +382,14 @@ const AddProduct = () => {
                   errors.Image6 ? "error-input" : ""
                 }`}
               />  
-              <input type="file" onChange={onFileChange}
+              <input type="file" onChange={e=>onFileChange(e,i)}
               />
+              <button onClick={()=>handleDeleteDocs(i)}>x</button>
               </div>
+              );
+            })
+          }
+          <button onClick={handleAddDocs}><i class="fa-solid fa-circle-plus"></i></button>
         </TabPane>
       </Tabs>
       </div>

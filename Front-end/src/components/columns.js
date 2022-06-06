@@ -2,6 +2,10 @@ import {format} from 'date-fns';
 
 export const COLUMNS = [
     {
+        Header: '',
+        accessor: 'is_payment'
+    },
+    {
         Header: 'Order ID',
         accessor: 'amazon_order_id'
     },

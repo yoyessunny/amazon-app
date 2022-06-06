@@ -1,6 +1,7 @@
 const express = require('express');
 const paymentrouter = express.Router();
 const Payment = require("../model/payment");
+const Order = require("../model/order");
 
 paymentrouter.get("/payment", async(req, res) => {
     const payments = await Payment.find();
@@ -18,7 +19,15 @@ paymentrouter.get("/payment", async(req, res) => {
       const arrData = Array.from(new Set(arrayData.map(JSON.stringify))).map(JSON.parse);
   
       arrData.map(async(val)=>{
-  
+
+          if(val["type"] === "Order"){
+            const order = await Order.findOne({amazon_order_id: val["order id"]});
+            if(order){
+              order.is_payment = true;
+              await order.save(); 
+            }         
+          }
+    
           const check = await Payment.findOne({date_time: val["date/time"], settlement_id: val["settlement id"], type: val["type"], total: val["total"]}); 
           if(check===null) {
               await Payment.create({

@@ -205,7 +205,10 @@ const BasicTable = (props) => {
                 return (<tr {...row.getRowProps()}>
                         {
                             row.cells.map((cell, index) => {
-                                return (index === 0 ) ? 
+                                return (index === 0 ) ?
+                                <td {...cell.getCellProps()}>{(cell.value===true)?<span className='text-success'><i class="fa-solid fa-circle-check"></i></span>:""}</td> 
+                                :
+                                (index === 1) ?
                                 <td {...cell.getCellProps()}><Link to={`/orders/${cell.value}`} target="_blank">{cell.render('Cell')}</Link></td>
                                 :
                                 <td {...cell.getCellProps()}>{cell.render('Cell')}</td>

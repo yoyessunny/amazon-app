@@ -58,6 +58,12 @@ app.use(router);
 const paymentrouter = require('./routes/payment');
 app.use(paymentrouter);
 
+const shipmentrouter = require('./routes/shipment');
+app.use(shipmentrouter);
+
+const inventoryrouter = require('./routes/inventory');
+app.use(inventoryrouter);
+
 app.post("/login", async(req, res) => {
   const {email, password} = req.body;
 
@@ -145,13 +151,28 @@ app.post("/productregister", async(req, res) => {
       Description, Bullet1, Bullet2, Bullet3, Bullet4, Bullet5,
       Item_Weight, Item_Length, Item_Width, Item_Height, Item_Unit_Measure,
       Country, MRP, Manufacturer, Ingredients, Category, Keywords,
-      Main_Image, Image1, Image2, Image3, Image4, Image5, Image6, Document_Name} = req.body;
+      Main_Image, Image1, Image2, Image3, Image4, Image5, Image6, Document_Name, No_of_files} = req.body;
 
-    const {file} = req.files;
-    const extension = file.name.split(".");
-    const DocumentName = Document_Name.replace(/\s+/g, '_');
-    const filename = SKU+'-'+DocumentName+'.'+extension[1];
-    file.mv(__dirname + "/documents/" + filename)
+    if(req.files){
+      try{
+      for(let i=0;i<No_of_files;i++){
+        const file = req.files[`file${i}`];
+        const extension = file.name.split(".");
+        const DocumentName = Document_Name.replace(/\s+/g, '_');
+        const filename = SKU+'-'+DocumentName+extension[0]+'.'+extension[1];
+        file.mv(__dirname + "/documents/" + filename , function(err){
+          try{
+
+          }
+          catch(err){
+            console.log(err);
+          }
+        })
+      }
+    }catch(err){
+      console.log(err);
+    }
+    }
 
     const checkSKU = await Product.findOne({SKU: SKU});
     if(checkSKU){

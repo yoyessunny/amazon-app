@@ -18,6 +18,10 @@ import Cookies from 'js-cookie';
 import PaymentTable from './components/PaymentTable';
 import axios from 'axios';
 import HomeScreen from './screens/HomeScreen';
+import InventoryScreen from './screens/InventoryScreen';
+import ShipmentScreen from './screens/ShipmentScreen';
+import AddShipments from './components/AddShipments';
+import EditShipments from './components/EditShipments';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -93,6 +97,10 @@ const App = () => {
                 <Route path="/payments/taxwithheld" exact={true} element={<PaymentTable items={items} loading={loading} error={error} viewType="Tax Withheld" />} />
                 <Route path="/payments/transfer" exact={true} element={<PaymentTable items={items} loading={loading} error={error} viewType="Transfer" />} />
                 <Route path="/payments/other" exact={true} element={<PaymentTable items={items} loading={loading} error={error} viewType="Other" />} />
+                <Route path="/inventory" exact={true} element={<InventoryScreen/>} />
+                <Route path="/shipment" exact={true} element={<ShipmentScreen/>} />
+                <Route path="/addShipment" exact={true} element={<AddShipments/>} />
+                <Route path="/editShipment/:id" exact={true} element={<EditShipments/>} />
                 </Routes>
                 </>)
                 :   

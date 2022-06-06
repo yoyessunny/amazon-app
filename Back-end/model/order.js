@@ -107,6 +107,9 @@ const orderSchema = new Schema({
         is_iba: {
             type: String,
         },
+        is_payment: {
+            type: Boolean,
+        },
 });
 
 const Order = mongoose.model("order", orderSchema);
