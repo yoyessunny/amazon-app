@@ -1,8 +1,9 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {toast} from 'react-toastify';
+import SearchBar from "./SearchBarComponent/SearchBar";
 
 
 const AddShipments = () => {
@@ -11,6 +12,7 @@ const AddShipments = () => {
 
   const [productData, setProductData] = useState([]);
   const [No_of_products, setNo_of_products] = useState(0);
+  const [inventoryData, setInventoryData] = useState([]);
 
   function onProductChange(e,i,j) {
     const inputData = [...productData];
@@ -23,6 +25,8 @@ const AddShipments = () => {
     }
     setProductData(inputData);
   }
+
+  console.log(productData);
 
   const handleAddDocs = (e) => {
     e.preventDefault();
@@ -69,6 +73,18 @@ const AddShipments = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
+
+  useEffect(()=>{
+      const fetchData = async() => {
+          try{
+              const {data} = await axios.get(`http://localhost:5000/inventory`);
+              setInventoryData(data);
+          }catch(err){
+              console.log(err);
+          }
+      }
+      fetchData();
+  },[]);
 
   return (
     <div className="container">
@@ -118,9 +134,9 @@ const AddShipments = () => {
               return (
               <div className='d-flex'>
                 SKU
-              <input type="text" placeholder="SKU"
-                onChange={e=>onProductChange(e,i,0)}
-              />  
+              <SearchBar placeholder="Enter an SKU..." data={inventoryData} 
+              Change={e=>onProductChange(e,i,0)}
+              /> 
               Product Name
               <input type="text" placeholder="Name"
                 onChange={e=>onProductChange(e,i,1)}
